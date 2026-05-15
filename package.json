@@ -12,6 +12,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@greatsumini/react-facebook-login": "^3.4.0",
+    "@react-oauth/google": "^0.13.5",
     "@tailwindcss/vite": "^4.1.17",
     "@tanstack/react-query": "^5.90.11",
     "axios": "^1.13.2",
@@ -19,6 +21,7 @@
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.19",
     "events": "^3.3.0",
+    "js-cookie": "^3.0.6",
     "jspdf": "^4.2.1",
     "jspdf-autotable": "^5.0.7",
     "lodash": "^4.17.21",
@@ -43,6 +46,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@types/js-cookie": "^3.0.6",
     "@types/lodash": "^4.17.21",
     "@types/node": "^24.12.0",
     "@types/react": "^19.2.5",

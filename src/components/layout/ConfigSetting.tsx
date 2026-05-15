@@ -7,7 +7,7 @@ import { InputSwitch } from "primereact/inputswitch";
 import { InputText } from "primereact/inputtext";
 import { Sidebar } from "primereact/sidebar";
 import { useRef, type FC } from "react";
-import { type ActionConfirmRef, SmoothSlider, ActionConfirm } from "../ui";
+import { ActionConfirm, SmoothSlider, type ActionConfirmRef } from "../ui";
 
 type ConfigSettingProps = {
   visible: boolean;
@@ -330,4 +330,4 @@ const ConfigSetting: FC<ConfigSettingProps> = ({ visible, onHide }) => {
   );
 };
 
-export default ConfigSetting;
+export { ConfigSetting };

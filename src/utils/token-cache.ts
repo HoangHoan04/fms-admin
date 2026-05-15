@@ -1,11 +1,13 @@
+import Cookies from "js-cookie";
+
 interface TokenData {
   accessToken: string | null;
   refreshToken: string | null;
   user: any | null;
 }
 
-const STORAGE_KEYS = {
-  ACCESS_TOKEN: "access_token",
+const COOKIE_KEYS = {
+  ACCESS_TOKEN: "token",
   REFRESH_TOKEN: "refresh_token",
   USER: "user_data",
 };
@@ -22,42 +24,15 @@ class TokenCache {
   }
 
   private loadFromStorage(): void {
+    if (typeof window === "undefined") return;
     try {
-      this.cache.accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
-      this.cache.refreshToken = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
-
-      const userStr = localStorage.getItem(STORAGE_KEYS.USER);
+      this.cache.accessToken = Cookies.get(COOKIE_KEYS.ACCESS_TOKEN) || null;
+      this.cache.refreshToken = Cookies.get(COOKIE_KEYS.REFRESH_TOKEN) || null;
+      const userStr = Cookies.get(COOKIE_KEYS.USER);
       this.cache.user = userStr ? JSON.parse(userStr) : null;
     } catch (error) {
       this.clear();
     }
-  }
-
-  setAccessToken(token: string): void {
-    this.cache.accessToken = token;
-    localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, token);
-  }
-
-  getAccessToken(): string | null {
-    return this.cache.accessToken;
-  }
-
-  setRefreshToken(token: string): void {
-    this.cache.refreshToken = token;
-    localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, token);
-  }
-
-  getRefreshToken(): string | null {
-    return this.cache.refreshToken;
-  }
-
-  setUser(user: any): void {
-    this.cache.user = user;
-    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
-  }
-
-  getUser(): any | null {
-    return this.cache.user;
   }
 
   setAuthData(accessToken: string, refreshToken: string, user: any): void {
@@ -66,29 +41,39 @@ class TokenCache {
       this.cache.refreshToken = refreshToken;
       this.cache.user = user;
 
-      localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
-      localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken);
-      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
+      Cookies.set(COOKIE_KEYS.ACCESS_TOKEN, accessToken, { expires: 1 });
+      Cookies.set(COOKIE_KEYS.REFRESH_TOKEN, refreshToken, { expires: 7 });
+      Cookies.set(COOKIE_KEYS.USER, JSON.stringify(user), { expires: 1 });
     } catch (error) {
-      return;
+      console.error("Error setting auth data in TokenCache:", error);
     }
+  }
+
+  updateUser(user: any): void {
+    this.cache.user = user;
+    Cookies.set(COOKIE_KEYS.USER, JSON.stringify(user), { expires: 1 });
   }
 
   clear(): void {
     this.cache.accessToken = null;
     this.cache.refreshToken = null;
     this.cache.user = null;
-    localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
-    localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
-    localStorage.removeItem(STORAGE_KEYS.USER);
+    Cookies.remove(COOKIE_KEYS.ACCESS_TOKEN);
+    Cookies.remove(COOKIE_KEYS.REFRESH_TOKEN);
+    Cookies.remove(COOKIE_KEYS.USER);
   }
 
-  isAuthenticated(): boolean {
+  getAccessToken() {
+    return this.cache.accessToken;
+  }
+  getRefreshToken() {
+    return this.cache.refreshToken;
+  }
+  getUser() {
+    return this.cache.user;
+  }
+  isAuthenticated() {
     return !!this.cache.accessToken;
-  }
-
-  hasRefreshToken(): boolean {
-    return !!this.cache.refreshToken;
   }
 }
 

@@ -1,17 +1,17 @@
 import { enumData } from "@/common/enums/enum";
 import { formatDateTime } from "@/common/helpers/formatHelper";
-import { type ActionLogDto, ActionType, useActionsLogPagination } from "@/hooks/action-log";
 import { useTheme } from "@/context/ThemeContext";
+import { type ActionLogDto, ActionType, useActionsLogPagination } from "@/hooks/action-log";
 import { Dialog } from "primereact/dialog";
 import { memo, useMemo, useState } from "react";
-import { type TableColumn, type RowAction, type PaginationConfig, TableCustom, StatusTag } from ".";
+import { type PaginationConfig, type RowAction, StatusTag, type TableColumn, TableCustom } from ".";
 
 interface ActionLogProps {
-  functionType: string;
-  functionId?: string;
+  entityName: string;
+  entityId?: string;
 }
 
-function ActionLog({ functionType, functionId }: ActionLogProps) {
+function ActionLog({ entityName, entityId }: ActionLogProps) {
   const { theme } = useTheme();
   const isDark = theme === "dark";
 
@@ -31,11 +31,11 @@ function ActionLog({ functionType, functionId }: ActionLogProps) {
       skip: skip,
       take: take,
       where: {
-        functionType: functionType,
-        functionId: functionId || "",
+        entityName: entityName,
+        entityId: entityId || "",
       },
     };
-  }, [paginationState.pageIndex, paginationState.pageSize, functionType, functionId]);
+  }, [paginationState.pageIndex, paginationState.pageSize, entityName, entityId]);
 
   const { data, total, isLoading } = useActionsLogPagination(queryPayload);
 
@@ -55,30 +55,26 @@ function ActionLog({ functionType, functionId }: ActionLogProps) {
       {
         field: "createdByCode",
         header: "Mã nhân viên",
-        style: { width: "180px" },
+        style: { width: "150px" },
       },
       {
-        field: "type",
+        field: "actionType",
         header: "Hành động",
-        style: { width: "150px" },
+        style: { width: "140px" },
         body: (rowData: ActionLogDto) => {
-          const actionName = (ActionType as any)[rowData.type] || rowData.type;
-          const label =
-            typeof actionName === "string"
-              ? actionName.replace("ActionType_", "")
-              : String(rowData.type);
+          const label = ActionType[rowData.actionType] || rowData.actionType;
 
           let severity: "success" | "warning" | "danger" | "info" = "info";
-          const typeStr = String(rowData.type).toUpperCase();
-          if (typeStr.includes("CREATE")) severity = "success";
+          const typeStr = String(rowData.actionType).toUpperCase();
+          if (typeStr.includes("CREATE") || typeStr.includes("ACTIVE")) severity = "success";
           else if (typeStr.includes("UPDATE")) severity = "warning";
-          else if (typeStr.includes("DELETE")) severity = "danger";
+          else if (typeStr.includes("DELETE") || typeStr.includes("DEACTIVE")) severity = "danger";
 
           return <StatusTag severity={severity} value={label} />;
         },
       },
       {
-        field: "description",
+        field: "createdNote",
         header: "Mô tả",
         style: { minWidth: "300px" },
       },
@@ -116,7 +112,19 @@ function ActionLog({ functionType, functionId }: ActionLogProps) {
     });
   };
 
-  if (!functionId) return null;
+  const parseJsonValue = (jsonStr: string | null): Record<string, any> | null => {
+    if (!jsonStr) return null;
+    try {
+      return JSON.parse(jsonStr);
+    } catch {
+      return null;
+    }
+  };
+
+  const oldData = selectedLog ? parseJsonValue(selectedLog.oldValue) : null;
+  const newData = selectedLog ? parseJsonValue(selectedLog.newValue) : null;
+
+  if (!entityId) return null;
 
   return (
     <div className="mt-2">
@@ -148,15 +156,15 @@ function ActionLog({ functionType, functionId }: ActionLogProps) {
                   isDark ? "border-red-900/30 text-red-400" : "border-red-100 text-red-600"
                 }`}
               >
-                <i className="pi pi-history" /> Dữ liệu cũ (dataOld)
+                <i className="pi pi-history" /> Dữ liệu cũ
               </h3>
               <pre
-                className={`custom-scrollbar m-0 max-h-[500px] overflow-x-auto font-mono text-xs whitespace-pre-wrap ${
+                className={`custom-scrollbar m-0 max-h-125 overflow-x-auto font-mono text-xs whitespace-pre-wrap ${
                   isDark ? "text-gray-300" : "text-gray-700"
                 }`}
               >
-                {selectedLog.dataOld && Object.keys(selectedLog.dataOld).length > 0
-                  ? JSON.stringify(selectedLog.dataOld, null, 2)
+                {oldData && Object.keys(oldData).length > 0
+                  ? JSON.stringify(oldData, null, 2)
                   : "Không có dữ liệu cũ hoặc record được tạo mới."}
               </pre>
             </div>
@@ -171,15 +179,15 @@ function ActionLog({ functionType, functionId }: ActionLogProps) {
                   isDark ? "border-green-900/30 text-green-400" : "border-green-100 text-green-600"
                 }`}
               >
-                <i className="pi pi-check-circle" /> Dữ liệu mới (dataNew)
+                <i className="pi pi-check-circle" /> Dữ liệu mới
               </h3>
               <pre
-                className={`custom-scrollbar m-0 max-h-[500px] overflow-x-auto font-mono text-xs whitespace-pre-wrap ${
+                className={`custom-scrollbar m-0 max-h-125 overflow-x-auto font-mono text-xs whitespace-pre-wrap ${
                   isDark ? "text-gray-300" : "text-gray-700"
                 }`}
               >
-                {selectedLog.dataNew && Object.keys(selectedLog.dataNew).length > 0
-                  ? JSON.stringify(selectedLog.dataNew, null, 2)
+                {newData && Object.keys(newData).length > 0
+                  ? JSON.stringify(newData, null, 2)
                   : "Không có dữ liệu mới cập nhật."}
               </pre>
             </div>

@@ -96,6 +96,7 @@ export interface FormCustomProps {
   submitText?: string;
   cancelText?: string;
   showDivider?: boolean;
+  showSubmitButton?: boolean;
   formStyle?: React.CSSProperties;
   gridColumns?: number;
   gap?: string;
@@ -115,6 +116,7 @@ const FormCustom = forwardRef<FormRef, FormCustomProps>(function FormCustom(
     submitText,
     cancelText,
     showDivider = true,
+    showSubmitButton = true,
     formStyle,
     gridColumns = 24,
     gap = "16px",
@@ -176,7 +178,7 @@ const FormCustom = forwardRef<FormRef, FormCustomProps>(function FormCustom(
           </div>
         ))}
 
-        {(onCancel || onSubmit) && (
+        {(onCancel || (showSubmitButton && onSubmit)) && (
           <div className="mt-4 text-center" style={{ gridColumn: `span ${gridColumns}` }}>
             <div className="flex justify-center gap-3">
               {onCancel && (

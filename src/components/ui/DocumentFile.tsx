@@ -1,12 +1,7 @@
+import type { FileDto } from "@/dto";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { useState } from "react";
-
-interface Document {
-  id: string;
-  fileName: string;
-  fileUrl: string;
-}
 
 const isImageFile = (fileName: string, fileUrl: string) => {
   const imgExts = [".jpg", ".jpeg", ".png", ".gif", ".webp", ".heic", ".bmp", ".svg"];
@@ -15,8 +10,15 @@ const isImageFile = (fileName: string, fileUrl: string) => {
   return imgExts.some((ext) => lowerName.endsWith(ext) || lowerUrl.includes(ext));
 };
 
-const DocumentFile = ({ documents }: { documents: Document[] }) => {
-  const [selectedImage, setSelectedImage] = useState<Document | null>(null);
+const getPreviewUrl = (url: string) => {
+  if (/\.(heic|heif)$/i.test(url)) {
+    return url.replace(/\.(heic|heif)$/i, ".jpg");
+  }
+  return url;
+};
+
+const DocumentFile = ({ documents }: { documents: FileDto[] }) => {
+  const [selectedImage, setSelectedImage] = useState<FileDto | null>(null);
 
   if (!documents || documents.length === 0) {
     return (
@@ -51,14 +53,18 @@ const DocumentFile = ({ documents }: { documents: Document[] }) => {
                 key={doc.id}
                 className="group relative flex h-40 w-40 shrink-0 overflow-hidden rounded-xl border border-gray-200 bg-gray-50 shadow-xs"
               >
-                <img src={doc.fileUrl} alt={doc.fileName} className="h-full w-full object-cover" />
+                <img
+                  src={getPreviewUrl(doc.fileUrl)}
+                  alt={doc.fileName}
+                  className="h-full w-full object-cover"
+                />
 
                 <div className="absolute inset-0 z-10 flex items-center justify-center gap-3 bg-black/40 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
                   <Button
                     icon="pi pi-eye"
                     tooltip="Xem chi tiết"
                     tooltipOptions={{ position: "top" }}
-                    className="w-10!h-10! flex! items-center! justify-center! border-0! p-0! text-white! shadow-md!"
+                    className="w-10!h-10! flex! items-center! justify-center! border-0! p-0! text-white! shadow-md! hover:bg-transparent!"
                     outlined
                     onClick={() => setSelectedImage(doc)}
                   />
@@ -66,7 +72,7 @@ const DocumentFile = ({ documents }: { documents: Document[] }) => {
                     icon="pi pi-download"
                     tooltip="Tải xuống"
                     tooltipOptions={{ position: "top" }}
-                    className="w-10!h-10! flex! items-center! justify-center! border-0! p-0! text-white! shadow-md!"
+                    className="w-10!h-10! flex! items-center! justify-center! border-0! p-0! text-white! shadow-md! hover:bg-transparent!"
                     onClick={() => handleDownload(doc.fileUrl, doc.fileName)}
                     outlined
                   />
@@ -122,7 +128,7 @@ const DocumentFile = ({ documents }: { documents: Document[] }) => {
       >
         {selectedImage && (
           <img
-            src={selectedImage.fileUrl}
+            src={getPreviewUrl(selectedImage.fileUrl)}
             alt={selectedImage.fileName}
             className="max-h-[70vh] max-w-full rounded object-contain shadow-md"
           />

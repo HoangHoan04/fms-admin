@@ -1,15 +1,21 @@
-import type { LoginReq, UserSessionDto } from "@/dto/auth.dto";
 import { authService } from "@/services";
 import { tokenCache } from "@/utils";
-import type { ReactNode } from "react";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { type ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+interface UserSession {
+  id?: string;
+  name?: string;
+  email?: string;
+  phone?: string;
+  [key: string]: any;
+}
+
 interface AuthContextType {
-  user: UserSessionDto | null;
+  user: UserSession | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (credentials: LoginReq) => Promise<void>;
+  login: (credentials: { username: string; password: string }) => Promise<void>;
   logout: () => Promise<void>;
   refreshUserInfo: () => Promise<void>;
 }
@@ -17,7 +23,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<UserSessionDto | null>(null);
+  const [user, setUser] = useState<UserSession | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -26,9 +32,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const token = tokenCache.getAccessToken();
       if (token) {
         try {
-          const response = await authService.getUserInfo();
+          const response = await authService.getMe();
           setUser(response.user);
-          tokenCache.setUser(response.user);
+          tokenCache.updateUser(response.user);
         } catch (error) {
           tokenCache.clear();
           setUser(null);
@@ -40,13 +46,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     initAuth();
   }, []);
 
-  const login = async (credentials: LoginReq) => {
+  const login = async (credentials: { username: string; password: string }) => {
     setIsLoading(true);
     try {
-      const response = await authService.login(credentials);
-
+      const response = await authService.loginNormal(credentials);
       tokenCache.setAuthData(response.accessToken, response.refreshToken, response.user);
-
       setUser(response.user);
       navigate("/");
     } catch (error) {
@@ -70,9 +74,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const refreshUserInfo = async () => {
     try {
-      const response = await authService.getUserInfo();
+      const response = await authService.getMe();
       setUser(response.user);
-      tokenCache.setUser(response.user);
+      tokenCache.updateUser(response.user);
     } catch (error) {
       await logout();
     }

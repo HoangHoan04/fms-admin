@@ -1,34 +1,44 @@
 import { type BaseDto, type FileDto } from "./common/base.dto";
 
+export interface MemberBankAccountDto {
+  id?: string;
+  bankName?: string;
+  bankAccountNo?: string;
+  bankAccountName?: string;
+  qrCode?: { fileName?: string; fileUrl?: string } | null;
+}
+
+export interface CreateMemberBankAccountDto {
+  bankName?: string;
+  bankAccountNo?: string;
+  bankAccountName?: string;
+  qrCode?: { fileName?: string; fileUrl?: string };
+}
+
 export interface MemberDto extends BaseDto {
   userId: string;
+  user: any;
   code: string;
   fullName: string;
+  shortName?: string;
   email: string;
+  phone: string;
   gender?: string;
-  phone?: string;
   birthday?: Date;
-  avatarUrl?: string;
-  bio?: string;
-  specialties?: string;
-  certifications?: string;
-  yearsExperience?: number;
-  user: any;
+  description?: string;
+  bankAccounts: MemberBankAccountDto[];
   avatar: FileDto[];
 }
 
 export interface CreateMemberDto {
-  userId?: string;
-  code?: string;
   fullName: string;
+  shortName?: string;
   email: string;
-  phone?: string;
-  birthday?: Date;
+  phone: string;
   gender?: string;
-  bio?: string;
-  specialties?: string;
-  certifications?: string;
-  yearsExperience?: number;
+  birthday?: Date;
+  description?: string;
+  bankAccounts?: CreateMemberBankAccountDto[];
   avatar?: FileDto[];
 }
 

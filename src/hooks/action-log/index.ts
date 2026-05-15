@@ -4,13 +4,13 @@ import rootApiService from "@/services/api.service";
 import { useQuery } from "@tanstack/react-query";
 
 export interface ActionLogFilter {
-  functionType: string;
-  functionId: string;
-  type?: string;
+  entityName?: string;
+  entityId?: string;
+  actionType?: string;
   createdBy?: string;
 }
 
-export const ActionType = {
+export const ActionType: Record<string, string> = {
   CREATE: "Tạo mới",
   UPDATE: "Cập nhật",
   DELETE: "Xóa",
@@ -18,19 +18,26 @@ export const ActionType = {
   APPROVE: "Phê duyệt",
   DEACTIVE: "Ngừng hoạt động",
   ACTIVE: "Kích hoạt",
-} as const;
+};
 
 export interface ActionLogDto {
   id: string;
-  createdAt: Date;
-  createdByName: string;
+  createdAt: string;
+  createdBy: string;
+  updatedAt: string;
+  updatedBy: string | null;
+  isDeleted: boolean;
+  createdById: string;
   createdByCode: string;
-  type: keyof typeof ActionType;
-  description: string;
-  functionType: string;
-  functionId: string;
-  dataOld?: any;
-  dataNew?: any;
+  createdByName: string;
+  createdNote: string;
+  actionType: string;
+  entityName: string;
+  entityId: string;
+  oldValue: string | null;
+  newValue: string | null;
+  ipAddress: string | null;
+  userAgent: string | null;
 }
 
 export const useActionsLogPagination = (params: PageRequest<ActionLogFilter>) => {

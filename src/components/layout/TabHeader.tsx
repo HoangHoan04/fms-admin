@@ -203,4 +203,4 @@ const AppTabHeader = ({ routes }: AppTabHeaderProps) => {
   );
 };
 
-export default AppTabHeader;
+export { AppTabHeader };

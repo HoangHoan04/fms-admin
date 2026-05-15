@@ -105,6 +105,6 @@ export interface FileDto {
   fileUrl: string;
   fileName: string;
   fileType?: string | null;
-  customerId?: string | null;
+  memberId?: string | null;
   employeeId?: string | null;
 }

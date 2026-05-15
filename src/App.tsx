@@ -1,9 +1,10 @@
 import "@/assets/styles/style.scss";
 import "@/assets/styles/tailwind.css";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "primeicons/primeicons.css";
 import "primereact/resources/primereact.min.css";
-import "primereact/resources/themes/lara-light-indigo/theme.css";
+import "primereact/resources/themes/lara-light-blue/theme.css";
 import { BrowserRouter as Router } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { ConfigProvider } from "./context/ConfigContext";
@@ -19,19 +20,21 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <FloatingButtonProvider>
-        <Router>
-          <ThemeProvider>
-            <AuthProvider>
-              <LoadingProvider>
-                <ToastProvider>
-                  <ConfigProvider>
-                    <AppRoutes />
-                  </ConfigProvider>
-                </ToastProvider>
-              </LoadingProvider>
-            </AuthProvider>
-          </ThemeProvider>
-        </Router>
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+          <Router>
+            <ThemeProvider>
+              <AuthProvider>
+                <LoadingProvider>
+                  <ToastProvider>
+                    <ConfigProvider>
+                      <AppRoutes />
+                    </ConfigProvider>
+                  </ToastProvider>
+                </LoadingProvider>
+              </AuthProvider>
+            </ThemeProvider>
+          </Router>
+        </GoogleOAuthProvider>
       </FloatingButtonProvider>
     </QueryClientProvider>
   );

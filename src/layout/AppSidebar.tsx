@@ -248,9 +248,8 @@ export default function AppSidebar({ collapsed }: AppSidebarProps) {
         {!collapsed && (
           <Link
             to={ROUTES.MAIN.HOME.path}
-            className={`font-['Syne'] text-xl font-extrabold tracking-[0.18em] whitespace-nowrap uppercase transition-all duration-300 select-none ${isDark ? "text-white" : "text-[#1a2a4a]"}`}
+            className={`text-md font-['Syne'] font-extrabold uppercase transition-all duration-300 select-none ${isDark ? "text-white" : "text-[#1a2a4a]"}`}
             style={{
-              letterSpacing: "0.18em",
               background: isDark
                 ? "linear-gradient(90deg, #38bdf8, #818cf8)"
                 : "linear-gradient(90deg, #2563eb, #4f46e5)",
@@ -258,7 +257,7 @@ export default function AppSidebar({ collapsed }: AppSidebarProps) {
               WebkitTextFillColor: "transparent",
             }}
           >
-            Fms
+            GIA ĐÌNH TRẺ A3
           </Link>
         )}
       </div>

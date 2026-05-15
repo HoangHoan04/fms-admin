@@ -38,3 +38,17 @@ export const formatTimeAgo = (dateString: string) => {
   const days = Math.floor(hours / 24);
   return `${days} ngày trước`;
 };
+
+export const formatCurrency = (
+  amount: number | null | undefined,
+  options?: {
+    unit?: string;
+  },
+): string => {
+  if (amount === null || amount === undefined) return "---";
+
+  const formatted = new Intl.NumberFormat("vi-VN").format(amount);
+  const unit = options?.unit ?? "đ";
+
+  return `${formatted} ${unit}`;
+};

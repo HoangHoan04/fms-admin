@@ -1,4 +1,3 @@
-import enFlag from "./en.svg";
-import logo from "./logo.svg";
-import viFlag from "./vi.svg";
-export { enFlag, logo, viFlag };
+import FacebookIcon from "./facebook.svg";
+import GoogleIcon from "./google.svg";
+export { FacebookIcon, GoogleIcon };

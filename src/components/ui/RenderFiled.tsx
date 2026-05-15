@@ -16,8 +16,8 @@ import { TabPanel, TabView } from "primereact/tabview";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import type { FormField } from "./FormCustom";
 import { FileUploadCustom } from ".";
+import type { FormField } from "./FormCustom";
 
 const isDeepEqual = (a: any, b: any) => {
   if (a === b) return true;
@@ -304,8 +304,23 @@ const FieldItem = memo(
           <div ref={handleSetRef}>
             <RequiredLabel label={field.label} required={field.required} />
             <InputNumber
-              value={value}
-              onValueChange={(e) => onChange(field.name, e.value)}
+              value={value ?? null}
+              onValueChange={(e) => {
+                onChange(field.name, e.value);
+              }}
+              onBlur={(e: any) => {
+                const rawValue = e.target?.value;
+                if (rawValue === undefined) return;
+
+                if (rawValue === "") {
+                  onChange(field.name, undefined);
+                  return;
+                }
+                const parsedValue = Number(String(rawValue).replace(/,/g, ""));
+                if (!Number.isNaN(parsedValue)) {
+                  onChange(field.name, parsedValue);
+                }
+              }}
               {...commonProps}
             />
           </div>
@@ -504,7 +519,9 @@ const FieldItem = memo(
     const allValuesChanged = !isDeepEqual(prev.allValues, next.allValues);
     const optionsChanged = !isDeepEqual(prev.field.options, next.field.options);
     const renderChanged = prev.field.render !== next.field.render;
-    return !valueChanged && !disabledChanged && !allValuesChanged && !optionsChanged && !renderChanged;
+    return (
+      !valueChanged && !disabledChanged && !allValuesChanged && !optionsChanged && !renderChanged
+    );
   },
 );
 

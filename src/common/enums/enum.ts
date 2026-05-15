@@ -97,36 +97,6 @@ export const enumData = {
     },
   },
 
-  BANNER_TYPE: {
-    HOME: { code: "HOME", name: "Trang chủ" },
-    ABOUT: { code: "ABOUT", name: "Giới thiệu" },
-    BLOG: { code: "BLOG", name: "Blog" },
-    SERVICES: { code: "SERVICES", name: "Dịch vụ" },
-    TOUR: { code: "TOUR", name: "Tour" },
-    BOOKING: { code: "BOOKING", name: "Đặt tour" },
-    NEWS: { code: "NEWS", name: "Tin tức" },
-    FAQ: { code: "FAQ", name: "Câu hỏi thường gặp" },
-  },
-
-  NEW_TYPE: {
-    NEWS: { code: "NEWS", name: "Tin tức" },
-    EVENT: { code: "EVENT", name: "Sự kiện" },
-  },
-
-  BLOG_STATUS: {
-    NEW: { code: "NEW", name: "Mới tạo", color: "blue" },
-    DRAFT: { code: "DRAFT", name: "Bản nháp", color: "orange" },
-    PUBLISHED: { code: "PUBLISHED", name: "Đã xuất bản", color: "green" },
-    ARCHIVED: { code: "ARCHIVED", name: "Lưu trữ", color: "gray" },
-    REJECT: { code: "REJECT", name: "Từ chối xuất bản", color: "red" },
-  },
-
-  BLOG_COMMENT_STATUS: {
-    PENDING: { code: "pending", name: "Chờ duyệt" },
-    APPROVED: { code: "approved", name: "Đã duyệt" },
-    REJECTED: { code: "rejected", name: "Từ chối" },
-  },
-
   MONTH: {
     JANUARY: { code: 1, name: "Tháng 1" },
     FEBRUARY: { code: 2, name: "Tháng 2" },
@@ -142,29 +112,88 @@ export const enumData = {
     DECEMBER: { code: 12, name: "Tháng 12" },
   },
 
-  COURSE_LEVEL: {
-    BEGINNER: { code: "BEGINNER", name: "Người mới bắt đầu", value: "BEGINNER" },
-    INTERMEDIATE: { code: "INTERMEDIATE", name: "Người đã có nền tảng", value: "INTERMEDIATE" },
-    ADVANCED: { code: "ADVANCED", name: "Nâng cao", value: "ADVANCED" },
+  FUND_STATUS: {
+    ACTIVE: {
+      id: "ACTIVE",
+      code: "ACTIVE",
+      name: "Hoạt động",
+      value: "active",
+      color: "#0b5a23",
+      severity: "success",
+    },
+    DRAFT: {
+      id: "DRAFT",
+      code: "DRAFT",
+      name: "Bản nháp",
+      value: "draft",
+      color: "#f13060",
+      severity: "secondary",
+    },
+    PAUSED: {
+      id: "PAUSED",
+      code: "PAUSED",
+      name: "Tạm dừng",
+      value: "paused",
+      color: "#e8af4f",
+      severity: "warning",
+    },
+    CLOSED: {
+      id: "CLOSED",
+      code: "CLOSED",
+      name: "Đã kết thúc",
+      value: "closed",
+      color: "#3794bf",
+      severity: "danger",
+    },
   },
 
-  CERTIFICATE: {
-    TOEIC: { code: "TOEIC", name: "TOEIC", value: "TOEIC" },
-    IELTS: { code: "IELTS", name: "IELTS", value: "IELTS" },
-    APTIS: { code: "APTIS", name: "APTIS", value: "APTIS" },
-    VSTEP: { code: "VSTEP", name: "VSTEP", value: "VSTEP" },
-    OTHER: { code: "OTHER", name: "Khác", value: "OTHER" },
+  CYCLE_TYPE: {
+    WEEKLY: { id: "WEEKLY", code: "WEEKLY", name: "Hàng tuần", value: "weekly" },
+    MONTHLY: { id: "MONTHLY", code: "MONTHLY", name: "Hàng tháng", value: "monthly" },
+    YEARLY: { id: "YEARLY", code: "YEARLY", name: "Hàng năm", value: "yearly" },
+    CUSTOM: { id: "CUSTOM", code: "CUSTOM", name: "Tùy chỉnh", value: "custom" },
   },
 
-  CERTIFICATE_SKILL: {
-    LISTENING: { code: "LISTENING", name: "Nghe", value: "LISTENING" },
-    READING: { code: "READING", name: "Đọc", value: "READING" },
-    WRITING: { code: "WRITING", name: "Viết", value: "WRITING" },
-    SPEAKING: { code: "SPEAKING", name: "Nói", value: "SPEAKING" },
-    GRAMMAR_VOCAB: {
-      code: "GRAMMAR_VOCAB",
-      name: "Ngữ pháp - Từ vựng",
-      value: "GRAMMAR_VOCAB",
+  CYCLE_STATUS: {
+    OPEN: {
+      id: "OPEN",
+      code: "OPEN",
+      name: "Mở",
+      value: "open",
+      color: "#3794bf",
+      severity: "info",
+    },
+    COLLECTING: {
+      id: "COLLECTING",
+      code: "COLLECTING",
+      name: "Đang thu",
+      value: "collecting",
+      color: "#e8af4f",
+      severity: "warning",
+    },
+    CLOSED: {
+      id: "CLOSED",
+      code: "CLOSED",
+      name: "Đã đóng",
+      value: "closed",
+      color: "#0b5a23",
+      severity: "success",
+    },
+    PAID_OUT: {
+      id: "PAID_OUT",
+      code: "PAID_OUT",
+      name: "Đã giải ngân",
+      value: "paid_out",
+      color: "#0b5a23",
+      severity: "success",
+    },
+    CANCELLED: {
+      id: "CANCELLED",
+      code: "CANCELLED",
+      name: "Đã hủy",
+      value: "cancelled",
+      color: "#f13060",
+      severity: "danger",
     },
   },
 };

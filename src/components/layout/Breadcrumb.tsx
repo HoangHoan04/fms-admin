@@ -171,4 +171,4 @@ const Breadcrumbs = ({ theme = "light" }: { theme?: "light" | "dark" }) => {
   );
 };
 
-export default Breadcrumbs;
+export { Breadcrumbs };

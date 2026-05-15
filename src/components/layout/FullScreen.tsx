@@ -57,4 +57,4 @@ const FullScreen = () => {
   );
 };
 
-export default FullScreen;
+export { FullScreen };

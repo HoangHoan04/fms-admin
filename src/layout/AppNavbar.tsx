@@ -1,3 +1,4 @@
+import { Breadcrumbs, FullScreen, Notification } from "@/components";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeContext";
 import { Avatar } from "primereact/avatar";
@@ -5,9 +6,6 @@ import { Button } from "primereact/button";
 import { Menu } from "primereact/menu";
 import type { MenuItem } from "primereact/menuitem";
 import { type FC, useRef } from "react";
-import Breadcrumbs from "../components/layout/Breadcrumb";
-import FullScreen from "../components/layout/FullScreen";
-import Notification from "@/components/layout/Notification";
 
 type AppNavbarProps = {
   collapsed: boolean;
@@ -50,19 +48,19 @@ const AppNavbar: FC<AppNavbarProps> = ({
     user?.roles && user.roles.length > 0
       ? user.roles[0].name
       : user?.isAdmin
-        ? "Administrator"
-        : "Người dùng";
+        ? "Quản trị viên"
+        : "Thành viên";
 
   const getAvatarUrl = () => {
-    if (user?.employee?.avatar) {
-      const avatarData = Array.isArray(user.employee.avatar)
-        ? user.employee.avatar[0]
-        : user.employee.avatar;
-      return (
-        avatarData?.url || "https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png"
-      );
+    const avatarSource = user?.avatar || user?.employee?.avatar;
+    if (avatarSource) {
+      const avatarData = Array.isArray(avatarSource) ? avatarSource[0] : avatarSource;
+      const url = avatarData?.fileUrl || avatarData?.url;
+      if (url && /\.(heic|heif)$/i.test(url)) {
+        return url.replace(/\.(heic|heif)$/i, ".jpg");
+      }
+      return url;
     }
-    return "https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png";
   };
 
   const iconBtnClasses = `
@@ -161,7 +159,7 @@ const AppNavbar: FC<AppNavbarProps> = ({
             <Avatar
               image={getAvatarUrl()}
               shape="circle"
-              className={`h-7! w-7! border-2! border-[#1890ff]! shadow-[0_2px_8px_rgba(24,144,255,0.2)]! sm:h-8! sm:w-8! md:h-9! md:w-9!`}
+              className={`h-16! w-20! border-2! border-[#1890ff]! shadow-[0_2px_8px_rgba(24,144,255,0.2)]! sm:h-8! sm:w-8! md:h-9! md:w-9!`}
             />
           </div>
         </div>

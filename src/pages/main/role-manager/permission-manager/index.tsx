@@ -3,27 +3,27 @@ import { enumData } from "@/common/enums";
 import {
   type ActionConfirmRef,
   type FilterField,
-  type TableColumn,
-  StatusTag,
   type RowAction,
-  BaseView,
-  FilterComponent,
-  TableCustom,
-  RowActions,
-  CommonActions,
+  type TableColumn,
   ActionConfirm,
+  BaseView,
+  CommonActions,
+  FilterComponent,
+  RowActions,
+  StatusTag,
+  TableCustom,
 } from "@/components/ui";
-import type { PermissionFilterDto, PaginationDto, PermissionDto } from "@/dto";
+import type { PaginationDto, PermissionDto, PermissionFilterDto } from "@/dto";
 import {
-  usePaginationPermission,
-  useDeactivatePermission,
   useActivatePermission,
+  useDeactivatePermission,
+  usePaginationPermission,
   useSyncPermissions,
 } from "@/hooks/permission";
 import { useRouter } from "@/routers/hooks";
 import { PrimeIcons } from "primereact/api";
 import { Button } from "primereact/button";
-import { useState, useRef } from "react";
+import { useRef, useState } from "react";
 
 export const initFilter: PermissionFilterDto = {
   code: "",
@@ -86,7 +86,7 @@ export default function PermissionManager() {
   };
 
   const handleCreate = () => {
-    router.push(ROUTES.MAIN.ROLE_MANAGER.children.PERMISSION_MANAGER.children.ADD_PERMISSION.path);
+    router.push(ROUTES.MAIN.ROLE_MANAGER.children.PERMISSION_LIST.children.ADD_PERMISSION.path);
   };
 
   const filterFields: FilterField[] = [
@@ -164,7 +164,7 @@ export default function PermissionManager() {
       severity: "info",
       onClick: (record) =>
         router.push(
-          ROUTES.MAIN.ROLE_MANAGER.children.PERMISSION_MANAGER.children.DETAIL_PERMISSION.path.replace(
+          ROUTES.MAIN.ROLE_MANAGER.children.PERMISSION_LIST.children.DETAIL_PERMISSION.path.replace(
             ":id",
             record.id,
           ),
@@ -178,7 +178,7 @@ export default function PermissionManager() {
       visible: (record) => !record.isDeleted,
       onClick: (record) => {
         router.push(
-          ROUTES.MAIN.ROLE_MANAGER.children.PERMISSION_MANAGER.children.EDIT_PERMISSION.path.replace(
+          ROUTES.MAIN.ROLE_MANAGER.children.PERMISSION_LIST.children.EDIT_PERMISSION.path.replace(
             ":id",
             record.id,
           ),

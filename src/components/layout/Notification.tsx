@@ -1,6 +1,6 @@
 import { ROUTES } from "@/common/constants";
 import { formatTimeAgo } from "@/common/helpers/formatHelper";
-import type { NotificationItem } from "@/dto";
+import { useAuth } from "@/context/AuthContext";
 import {
   useMarkAllRead,
   useMarkReadList,
@@ -17,12 +17,16 @@ const Notification: FC = () => {
   const op = useRef<OverlayPanel>(null);
   const router = useRouter();
   const [isRefetching, setIsRefetching] = useState(false);
+  const { user } = useAuth();
 
-  const { count: unreadCount } = useUnreadCount();
+  const isAdmin = user?.isAdmin;
+  const userId = user?.id;
+  const where = !isAdmin && userId ? { userId } : {};
+  const { count: unreadCount } = useUnreadCount(where);
   const { data: notifications, refetch } = usePaginationNotification({
     skip: 0,
     take: 20,
-    where: {},
+    where,
   });
   const { onMarkReadList } = useMarkReadList();
   const { onMarkAllRead } = useMarkAllRead();
@@ -41,10 +45,10 @@ const Notification: FC = () => {
 
   const handleViewAll = () => {
     op.current?.hide();
-    router.push(ROUTES.OTHER.NOTIFICATION.path);
+    router.push(ROUTES.OTHER.NOTIFY.path);
   };
 
-  const getIconByCategory = (category: NotificationItem["category"]) => {
+  const getIconByCategory = (category?: string) => {
     switch (category) {
       case "AUTH":
         return "pi pi-user text-blue-500";
@@ -127,32 +131,32 @@ const Notification: FC = () => {
               notifications.map((notification) => (
                 <div
                   key={notification.id}
-                  onClick={() => handleNotificationClick(notification.id, notification.isSeen)}
+                  onClick={() => handleNotificationClick(notification.id, notification.isRead)}
                   className={`flex cursor-pointer gap-3 rounded-lg p-3 transition-all ${
-                    notification.isSeen ? "bg-transparent opacity-70" : "bg-blue-50/40 shadow-sm"
+                    notification.isRead ? "bg-transparent opacity-70" : "bg-blue-50/40 shadow-sm"
                   }`}
                 >
                   <div className="mt-0.5 shrink-0">
-                    <i className={`${getIconByCategory(notification.category)} text-xl`} />
+                    <i className={`${getIconByCategory(notification.payload?.category)} text-xl`} />
                   </div>
 
                   <div className="min-w-0 flex-1">
                     <div className="mb-0.5 flex items-start justify-between gap-2">
                       <h4
                         className={`m-0 truncate text-sm font-semibold ${
-                          !notification.isSeen ? "text-blue-700" : "text-gray-700"
+                          !notification.isRead ? "text-blue-700" : "text-gray-700"
                         }`}
                       >
                         {notification.title}
                       </h4>
-                      {!notification.isSeen && (
+                      {!notification.isRead && (
                         <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-blue-500" />
                       )}
                     </div>
 
-                    {notification.description && (
+                    {notification.body && (
                       <p className="m-0 mb-1 line-clamp-2 text-xs leading-relaxed text-gray-500">
-                        {notification.description}
+                        {notification.body}
                       </p>
                     )}
 
@@ -182,4 +186,4 @@ const Notification: FC = () => {
   );
 };
 
-export default Notification;
+export { Notification };

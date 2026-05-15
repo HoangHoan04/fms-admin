@@ -214,7 +214,7 @@ const RowActions = ({
     const hasSubActions = action.subActions && action.subActions.length > 0;
     const isLastButtons = index >= visibleActions.length - 2;
     const tooltipPosition = isLastButtons ? "left" : action.tooltipPosition || "top";
-
+    const tooltipText = action.tooltip || action.label || action.key;
     const mainColor = getActionColor(action.severity);
 
     const button = (
@@ -228,7 +228,6 @@ const RowActions = ({
         loading={action.loading}
         disabled={action.disabled}
         size={action.size || size}
-        className={`${action.className || ""} bg-transparent! shadow-none! hover:bg-black/5!`}
         style={{
           width: fullWidth ? "100%" : "auto",
           padding: "5px 8px",
@@ -240,8 +239,10 @@ const RowActions = ({
         }}
         badge={action.badge}
         onClick={hasSubActions ? (e) => overlayRefs.current[action.key]?.toggle(e) : action.onClick}
-        data-pr-tooltip={action.tooltip || ""}
-        data-pr-position={tooltipPosition}
+        tooltip={tooltipText}
+        tooltipOptions={{ position: tooltipPosition, showDelay: 0, hideDelay: 0 }}
+        title={tooltipText}
+        className={`row-action-button ${action.className || ""} bg-transparent! shadow-none! hover:bg-black/5!`}
       />
     );
 

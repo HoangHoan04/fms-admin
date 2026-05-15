@@ -84,4 +84,4 @@ const BackToTop = () => {
   );
 };
 
-export default BackToTop;
+export { BackToTop };

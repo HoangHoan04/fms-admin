@@ -1,7 +1,14 @@
 import { Tag } from "primereact/tag";
 import React from "react";
 
-type SeverityType = "success" | "info" | "warning" | "danger" | "secondary" | null | undefined;
+export type SeverityType =
+  | "success"
+  | "info"
+  | "warning"
+  | "danger"
+  | "secondary"
+  | null
+  | undefined;
 
 interface StatusTagProps {
   value: React.ReactNode;

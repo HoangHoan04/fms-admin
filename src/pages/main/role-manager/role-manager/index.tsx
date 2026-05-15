@@ -1,20 +1,20 @@
 import { ROUTES } from "@/common/constants";
 import { enumData } from "@/common/enums";
 import {
-  CommonActions,
-  type ActionConfirmRef,
-  type FilterField,
   ActionConfirm,
   BaseView,
+  CommonActions,
   FilterComponent,
   RowActions,
   StatusTag,
   TableCustom,
+  type ActionConfirmRef,
+  type FilterField,
   type RowAction,
   type TableColumn,
 } from "@/components/ui";
-import type { RoleFilterDto, PaginationDto, RoleDto } from "@/dto";
-import { usePaginationRole, useDeactivateRole, useActivateRole } from "@/hooks/role";
+import type { PaginationDto, RoleDto, RoleFilterDto } from "@/dto";
+import { useActivateRole, useDeactivateRole, usePaginationRole } from "@/hooks/role";
 import { useRouter } from "@/routers/hooks";
 import { PrimeIcons } from "primereact/api";
 import { useRef, useState } from "react";
@@ -78,7 +78,7 @@ export default function RoleManager() {
   };
 
   const handleCreate = () => {
-    router.push(ROUTES.MAIN.ROLE_MANAGER.children.ROLE_MANAGER.children.ADD_ROLE.path);
+    router.push(ROUTES.MAIN.ROLE_MANAGER.children.ROLE_LIST.children.ADD_ROLE.path);
   };
 
   const filterFields: FilterField[] = [
@@ -143,7 +143,7 @@ export default function RoleManager() {
       severity: "info",
       onClick: (record) =>
         router.push(
-          ROUTES.MAIN.ROLE_MANAGER.children.ROLE_MANAGER.children.DETAIL_ROLE.path.replace(
+          ROUTES.MAIN.ROLE_MANAGER.children.ROLE_LIST.children.DETAIL_ROLE.path.replace(
             ":id",
             record.id,
           ),
@@ -157,7 +157,7 @@ export default function RoleManager() {
       visible: (record) => !record.isDeleted,
       onClick: (record) => {
         router.push(
-          ROUTES.MAIN.ROLE_MANAGER.children.ROLE_MANAGER.children.EDIT_ROLE.path.replace(
+          ROUTES.MAIN.ROLE_MANAGER.children.ROLE_LIST.children.EDIT_ROLE.path.replace(
             ":id",
             record.id,
           ),

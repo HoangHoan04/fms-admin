@@ -256,6 +256,7 @@ function TableCustom<T extends Record<string, any>>({
           const buttonId = `action-${action.key}-${options.rowIndex}-${index}`;
           const isLastButtons = index >= visibleActions.length - 2;
           const tooltipPosition = isLastButtons ? "left" : "top";
+          const tooltipText = action.tooltip || action.label || action.key;
 
           const mainColor = (() => {
             switch (action.severity) {
@@ -278,10 +279,11 @@ function TableCustom<T extends Record<string, any>>({
             <span
               key={action.key}
               id={buttonId}
-              data-pr-tooltip={action.tooltip || ""}
+              data-pr-tooltip={tooltipText}
               data-pr-position={tooltipPosition}
               className="action-button-tooltip"
               style={{ display: "inline-flex" }}
+              title={tooltipText}
             >
               <Button
                 icon={action.icon}
@@ -544,7 +546,7 @@ function TableCustom<T extends Record<string, any>>({
       <Tooltip
         target=".action-button-tooltip"
         position="top"
-        showDelay={200}
+        showDelay={0}
         hideDelay={0}
         className="my-custom-tooltip"
         mouseTrack

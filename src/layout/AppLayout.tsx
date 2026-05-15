@@ -1,12 +1,10 @@
 import { ROUTES } from "@/common/constants/routes";
-import BackToTop from "@/components/layout/BackToTop";
-import ConfigSetting from "@/components/layout/ConfigSetting";
-import AppTabHeader from "@/components/layout/TabHeader";
+import { AppTabHeader, BackToTop, ConfigSetting } from "@/components";
 import { ChangePasswordModal } from "@/components/layout/ChangePassword";
 import { useAuth } from "@/context/AuthContext";
 import { ConfigProvider, useConfig } from "@/context/ConfigContext";
 import { useToast } from "@/context/ToastContext";
-import { useEffect, useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import AppFooter from "./AppFooter";
 import AppNavbar from "./AppNavbar";

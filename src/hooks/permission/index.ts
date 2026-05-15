@@ -31,9 +31,9 @@ export const usePaginationPermission = (params: PaginationDto<PermissionFilterDt
 
 export const usePermissionDetail = (id: string | undefined | null) => {
   const { data, isLoading, refetch, error } = useQuery<SuccessResponse<PermissionDto>>({
-    queryKey: [API_ENDPOINTS.PERMISSION.DETAIL, id],
+    queryKey: [API_ENDPOINTS.PERMISSION.FIND_BY_ID, id],
     queryFn: async () => {
-      const res = await rootApiService.post(API_ENDPOINTS.PERMISSION.DETAIL, {
+      const res = await rootApiService.post(API_ENDPOINTS.PERMISSION.FIND_BY_ID, {
         id,
       });
       return res as SuccessResponse<PermissionDto>;
@@ -100,7 +100,7 @@ export const useUpdatePermission = () => {
         queryKey: [API_ENDPOINTS.PERMISSION.PAGINATION],
       });
       queryClient.invalidateQueries({
-        queryKey: [API_ENDPOINTS.PERMISSION.DETAIL, variables.id],
+        queryKey: [API_ENDPOINTS.PERMISSION.FIND_BY_ID, variables.id],
       });
       queryClient.invalidateQueries({
         queryKey: [API_ENDPOINTS.PERMISSION.SELECT_BOX],
@@ -223,9 +223,9 @@ export const usePermissionSelectBox = () => {
 
 export const usePermissionsByRole = (roleId: string | undefined | null) => {
   const { data, isLoading, refetch, error } = useQuery<RolePermissionDto[]>({
-    queryKey: [API_ENDPOINTS.PERMISSION.ROLE_LIST, roleId],
+        queryKey: [API_ENDPOINTS.PERMISSION.GET_PERMISSION_BY_ROLE, roleId],
     queryFn: async () => {
-      const res = await rootApiService.post(API_ENDPOINTS.PERMISSION.ROLE_LIST, {
+      const res = await rootApiService.post(API_ENDPOINTS.PERMISSION.GET_PERMISSION_BY_ROLE, {
         roleId,
       });
       if (Array.isArray(res)) return res as RolePermissionDto[];
@@ -318,9 +318,9 @@ export interface UserPermissionDto {
 
 export const usePermissionsByUser = (userId: string | undefined | null) => {
   const { data, isLoading, refetch } = useQuery<UserPermissionDto[]>({
-    queryKey: [API_ENDPOINTS.PERMISSION.USER_LIST, userId],
+        queryKey: [API_ENDPOINTS.PERMISSION.GET_PERMISSION_BY_USER, userId],
     queryFn: async () => {
-      const res = await rootApiService.post(API_ENDPOINTS.PERMISSION.USER_LIST, { userId });
+      const res = await rootApiService.post(API_ENDPOINTS.PERMISSION.GET_PERMISSION_BY_USER, { userId });
       if (Array.isArray(res)) return res as UserPermissionDto[];
       return (res as SuccessResponse<UserPermissionDto[]>).data || [];
     },
@@ -345,10 +345,10 @@ export const useAssignPermissionToUser = () => {
       grantType: "Allow" | "Deny";
       reason?: string;
     }) =>
-      rootApiService.post(API_ENDPOINTS.PERMISSION.USER_ASSIGN, data) as Promise<SuccessResponse>,
+      rootApiService.post(API_ENDPOINTS.PERMISSION.ASSIGN_TO_USER, data) as Promise<SuccessResponse>,
     onSuccess: (_res, variables) => {
       queryClient.invalidateQueries({
-        queryKey: [API_ENDPOINTS.PERMISSION.USER_LIST, variables.userId],
+        queryKey: [API_ENDPOINTS.PERMISSION.GET_PERMISSION_BY_USER, variables.userId],
       });
       showToast({
         type: "success",
@@ -376,12 +376,12 @@ export const useRemoveUserPermission = () => {
 
   const { mutateAsync: onRemoveUserPermission, isPending: isLoading } = useMutation({
     mutationFn: (id: string) =>
-      rootApiService.post(API_ENDPOINTS.PERMISSION.USER_REMOVE, {
+      rootApiService.post(API_ENDPOINTS.PERMISSION.REMOVE_FROM_USER, {
         id,
       }) as Promise<SuccessResponse>,
     onSuccess: (_res) => {
       queryClient.invalidateQueries({
-        queryKey: [API_ENDPOINTS.PERMISSION.USER_LIST],
+        queryKey: [API_ENDPOINTS.PERMISSION.GET_PERMISSION_BY_USER],
       });
       showToast({
         type: "success",
@@ -409,10 +409,10 @@ export const useAssignPermissionsToRole = () => {
 
   const { mutateAsync: onAssignPermissionsToRole, isPending: isLoading } = useMutation({
     mutationFn: (data: AssignPermissionsToRoleDto) =>
-      rootApiService.post(API_ENDPOINTS.PERMISSION.ROLE_ASSIGN, data) as Promise<SuccessResponse>,
+      rootApiService.post(API_ENDPOINTS.PERMISSION.ASSIGN_TO_ROLE, data) as Promise<SuccessResponse>,
     onSuccess: (res: SuccessResponse, variables) => {
       queryClient.invalidateQueries({
-        queryKey: [API_ENDPOINTS.PERMISSION.ROLE_LIST, variables.roleId],
+        queryKey: [API_ENDPOINTS.PERMISSION.GET_PERMISSION_BY_ROLE, variables.roleId],
       });
       showToast({
         type: "success",

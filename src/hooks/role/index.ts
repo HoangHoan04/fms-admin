@@ -24,9 +24,9 @@ export const usePaginationRole = (params: PaginationDto<RoleFilterDto>) => {
 
 export const useRoleDetail = (id: string | undefined | null) => {
   const { data, isLoading, refetch, error } = useQuery<SuccessResponse<RoleDto>>({
-    queryKey: [API_ENDPOINTS.ROLE.DETAIL, id],
+    queryKey: [API_ENDPOINTS.ROLE.FIND_BY_ID, id],
     queryFn: async () => {
-      const res = await rootApiService.post(API_ENDPOINTS.ROLE.DETAIL, {
+      const res = await rootApiService.post(API_ENDPOINTS.ROLE.FIND_BY_ID, {
         id,
       });
       return res as SuccessResponse<RoleDto>;
@@ -93,7 +93,7 @@ export const useUpdateRole = () => {
         queryKey: [API_ENDPOINTS.ROLE.PAGINATION],
       });
       queryClient.invalidateQueries({
-        queryKey: [API_ENDPOINTS.ROLE.DETAIL, variables.id],
+        queryKey: [API_ENDPOINTS.ROLE.FIND_BY_ID, variables.id],
       });
       queryClient.invalidateQueries({
         queryKey: [API_ENDPOINTS.ROLE.SELECT_BOX],
