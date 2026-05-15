@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  admin:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fms_admin
+    restart: always
+    ports:
+      - "8080:80"
